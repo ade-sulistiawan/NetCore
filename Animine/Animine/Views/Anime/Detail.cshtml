@@ -1,0 +1,67 @@
+﻿@using JikanDotNet
+@model Anime
+
+<div class="container my-4">
+    <h3>@Model.Title</h3>
+    <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-3">
+            <img src="@Model.Images.JPG.ImageUrl" alt="One Piece Poster" class="img-fluid mb-3 ">
+            <button class="btn btn-primary w-100 mb-2">Watch Episodes</button>
+
+            <div class="mt-5">
+                <h6>Alternative Titles</h6>
+                <hr />
+                <p>Synonyms: @Model.Titles.FirstOrDefault(l => l.Type == "Synonym").Title.ToString()</p>
+                <p>Japanese: @Model.Titles.FirstOrDefault(l => l.Type == "Japanese").Title.ToString()</p>
+            </div>
+            <div class="mt-5">
+                <h6>Information</h6>
+                <hr />
+                <p>Type: @Model.Type</p>
+                <p>Episodes: @Model.Episodes</p>
+                <p>Status: @Model.Status</p>
+                <p>
+                    Aired: @Model.Aired.From?.ToString("MMM dd, yyyy") to @Model.Aired.To?.ToString("MMM dd, yyyy")
+                </p>
+                <p>Premiered: @Model.Season @Model.Year</p>
+                <p>Broadcast: @Model.Broadcast.Day at @Model.Broadcast.Time @Model.Broadcast.Timezone </p>
+            </div>
+            <div class="mt-5">
+                <h6>Statistics</h6>
+                <hr />
+                <p>Score: @Model.Score (scored by @String.Format("{0:N0}", Model.ScoredBy) users)</p>
+                <p>Ranked: @Model.Rank</p>
+                <p>Popularity: @Model.Popularity</p>
+                <p>Favorites: @String.Format("{0:N0}", Model.Favorites) </p>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div>
+                <h6>Synopsis</h6>
+                <hr />
+                <p>
+                    @Model.Synopsis
+                </p>
+            </div>
+            <div class="mt-4">
+                <h6>Background</h6>
+                <hr />
+                <p>
+                    @Model.Background
+                </p>
+            </div>
+            <div class="mt-4">
+                <h6>Characters</h6>
+                <hr />
+                @{
+                    Jikan _animeService = new Jikan();
+                    long charId = Model.MalId ?? 0;
+                    var characters = await _animeService.GetAnimeCharactersAsync(charId);
+                    await Html.RenderPartialAsync("~/Views/Character/_GetCharacterById.cshtml", characters.Data);
+                }
+            </div>
+        </div>
+    </div>
+</div>

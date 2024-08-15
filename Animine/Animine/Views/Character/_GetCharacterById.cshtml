@@ -1,0 +1,18 @@
+﻿@using JikanDotNet
+@model ICollection<AnimeCharacter>
+<div class="row row-cols-1 row-cols-md-6 g-4">
+    @{
+        foreach (var item in Model.Where(c => c.Role == "Main"))
+        {
+            <div class="col">
+                <div>
+                    <img src="@item.Character.Images.JPG.ImageUrl" class="card-img-top"
+                         alt="@item.Character.Name" />
+                    <div>
+                        <h6>@item.Character.Name</h6>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

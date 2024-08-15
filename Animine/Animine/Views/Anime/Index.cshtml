@@ -1,0 +1,70 @@
+﻿@using JikanDotNet
+@model ICollection<Anime>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="dark">
+    <div class="container py-4">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var anime = Model.ElementAt(i);
+            if (i % 2 == 0)
+            {
+
+                <article class="postcard dark blue">
+                    <a class="postcard__img_link" href="/Anime/Detail?id=@anime.MalId">
+                        <img class="postcard__img" src="@Url.Content(anime.Images.WebP.LargeImageUrl)" alt="Image Title" />
+                    </a>
+                    <div class="postcard__text">
+                        <h1 class="postcard__title blue" style="margin-left:5px"><a href="/Anime/Detail?id=@anime.MalId">@anime.Title</a></h1>
+                        <div class="postcard__subtitle small" style="margin-left:5px">
+                            <i class="bi bi-calendar-date-fill mr-2"></i> @anime.Year
+                        </div>
+                        <div class="postcard__bar"></div>
+                        <div class="postcard__preview-txt">@anime.Synopsis</div>
+                        <ul class="postcard__tagbox">
+                            <li class="tag__item play blue">
+                                <a href="#"><i class="bi bi-play-fill mr-2"></i> @anime.Episodes Episodes</a>
+                            </li>
+                            @for (int j = 0; j < anime.Genres.Count; j++)
+                            {
+                                var genre = anime.Genres.ElementAt(j);
+                                <li class="tag__item"><i class="fas fa-tag mr-2"></i>@genre.Name</li>
+                            }
+
+                        </ul>
+                    </div>
+                </article>
+            }
+            else
+            {
+                <article class="postcard dark red">
+                    <a class="postcard__img_link" href="/Anime/Detail?id=@anime.MalId">
+                        <img class="postcard__img" src="@Url.Content(anime.Images.WebP.LargeImageUrl)" alt="Image Title" />
+                    </a>
+                    <div class="postcard__text">
+                        <h1 class="postcard__title red"><a href="/Anime/Detail?id=@anime.MalId">@anime.Title</a></h1>
+                        <div class="postcard__subtitle small">
+                            <i class="bi bi-calendar-date-fill mr-2"></i> @anime.Year
+                        </div>
+                        <div class="postcard__bar"></div>
+                        <div class="postcard__preview-txt">@anime.Synopsis</div>
+                        <ul class="postcard__tagbox">
+                            <li class="tag__item play red">
+                                <a href="#"><i class="bi bi-play-fill mr-2"></i> @anime.Episodes Episodes</a>
+                            </li>
+
+                            @for (int j = 0; j < anime.Genres.Count; j++)
+                            {
+                                var genre = anime.Genres.ElementAt(j);
+                                <li class="tag__item"><i class="fas fa-tag mr-2"></i>@genre.Name</li>
+                            }
+                        </ul>
+                    </div>
+                </article>
+            }
+        }
+    </div>
+</section>

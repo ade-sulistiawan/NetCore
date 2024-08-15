@@ -1,0 +1,16 @@
+﻿@using JikanDotNet
+@model ICollection<Anime>
+
+@{
+    ViewData["Title"] = "Test";
+}
+<ul>
+    @foreach (var anime in Model)
+    {
+        <li>
+            <img src="@anime.Images.WebP.LargeImageUrl" alt="@anime.Title" width="100" />
+            <h2>@anime.Title</h2>
+            <p>@anime.Synopsis</p>
+        </li>
+    }
+</ul>
