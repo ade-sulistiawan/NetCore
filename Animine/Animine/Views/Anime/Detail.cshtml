@@ -6,8 +6,8 @@
     <div class="row">
         <!-- Left Column -->
         <div class="col-md-3">
-            <img src="@Model.Images.JPG.ImageUrl" alt="One Piece Poster" class="img-fluid mb-3 ">
-            <button class="btn btn-primary w-100 mb-2">Watch Episodes</button>
+            <img src="@Model.Images.JPG.ImageUrl" alt="One Piece Poster" class="img-fluid mb-3 w-100">
+            <a class="btn btn-primary w-100 mb-2" href="/Anime/Episode?id=@Model.MalId">List Episodes</a>
 
             <div class="mt-5">
                 <h6>Alternative Titles</h6>
@@ -26,14 +26,27 @@
                 </p>
                 <p>Premiered: @Model.Season @Model.Year</p>
                 <p>Broadcast: @Model.Broadcast.Day at @Model.Broadcast.Time @Model.Broadcast.Timezone </p>
+                <p>
+                    Producers: <span>@String.Join(", ", Model.Producers.Select(p => p.Name))</span>
+                </p>
+                <p>Licensors: <span>@String.Join(", ", Model.Licensors.Select(p => p.Name))  </p>
+                <p>Studios: <span>@String.Join(", ", Model.Studios.Select(p => p.Name))</p>
+                <p>Source: @Model.Source</p>
+                <p>Genres: <span>@String.Join(", ", Model.Genres.Select(p => p.Name))</p>
+                <p>Demographic: <span>@String.Join(", ", Model.Demographics.Select(p => p.Name))</p>
+                <p>Duration: @Model.Duration</p>
+                <p>Rating: @Model.Rating</p>
+
             </div>
             <div class="mt-5">
-                <h6>Statistics</h6>
+                <h5>Statistics</h5>
                 <hr />
                 <p>Score: @Model.Score (scored by @String.Format("{0:N0}", Model.ScoredBy) users)</p>
                 <p>Ranked: @Model.Rank</p>
                 <p>Popularity: @Model.Popularity</p>
-                <p>Favorites: @String.Format("{0:N0}", Model.Favorites) </p>
+                <h6>
+                    Favorites:
+                </h6><span>@String.Format("{0:N0}", Model.Favorites) </span>
             </div>
         </div>
 
@@ -56,12 +69,40 @@
                 <h6>Characters</h6>
                 <hr />
                 @{
-                    Jikan _animeService = new Jikan();
-                    long charId = Model.MalId ?? 0;
-                    var characters = await _animeService.GetAnimeCharactersAsync(charId);
-                    await Html.RenderPartialAsync("~/Views/Character/_GetCharacterById.cshtml", characters.Data);
+                    try
+                    {
+                        Jikan _animeService = new Jikan();
+                        long charId = Model.MalId ?? 0;
+                        var characters = await _animeService.GetAnimeCharactersAsync(charId);
+                        await Html.RenderPartialAsync("~/Views/Character/_GetCharacterById.cshtml", characters.Data);
+                        
+                    }
+                    catch
+                    {
+                        await Html.RenderPartialAsync("~/Views/Error.cshtml");
+                    }
                 }
+            </div>
+            <div class="mt-4">
+                <h6>Trailer</h6>
+                <hr />
+                <iframe width="100%" height="450"
+                        src="@Url.Content(Model.Trailer.EmbedUrl)"
+                        frameborder="0"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope">
+                </iframe>
             </div>
         </div>
     </div>
 </div>
+@* 
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            alert("ready!");
+        });
+    </script>
+} *@

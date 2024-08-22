@@ -1,0 +1,153 @@
+﻿@using JikanDotNet
+@model ICollection<AnimeEpisode>
+
+<h6>Episode</h6>
+<table class="table table-bordered table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Episode</th>
+            <th scope="col">Title</th>
+            <th scope="col">Aired</th>
+            <th scope="col">Filler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var episode in Model)
+        {
+            <tr>
+                <th scope="row">@episode.MalId</th>
+                <td>@episode.Title</td>
+                <td>@episode.Aired?.ToString("dd MMM yyyy")</td>
+                <td>@episode.Filler</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* @{
+    var pagination = ViewBag.EpisodePagination as Pagination;
+    int animeId = ViewBag.AnimeId;
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-end">
+            <li class="page-item">
+                @if (pagination.CurrentPage != 1)
+                {
+                    <a class="page-link" href="/Anime/Episode?id=@animeId&@(pagination.CurrentPage - 1)">Previous</a>
+                }
+                else
+                {
+                    <a class="page-link" href="#">Previous</a>
+                }
+            </li>
+
+            @for (int i = 1; i <= pagination.LastVisiblePage; i++)
+            {
+                string active = (i == @pagination.CurrentPage) ? "active" : "";
+                <li class="page-item @active">
+                    <a class="page-link" href="/Anime/Episode?id=@animeId&page=@i">@i</a>
+                </li>
+            }
+
+            <li class="page-item">
+                @if (pagination.CurrentPage != pagination.LastVisiblePage)
+                {
+                    <a class="page-link" href="/Anime/Episode?id=@animeId&page=@(pagination.CurrentPage + 1)">Next</a>
+                }
+                else
+                {
+                    <a class="page-link" href="#">Next</a>
+                }
+            </li>
+        </ul>
+    </nav>
+} *@
+
+
+@{
+    var pagination = ViewBag.EpisodePagination as Pagination;
+    int animeId = ViewBag.AnimeId;
+    int totalPagesToShow = 5;
+    int currentPage = pagination.CurrentPage ?? 1;
+    int totalPages = pagination.LastVisiblePage;
+
+    int startPage = Math.Max(1, currentPage - 2);
+    int endPage = Math.Min(totalPages, currentPage + 2);
+
+    if (endPage - startPage + 1 < totalPagesToShow && startPage > 1)
+    {
+        startPage = Math.Max(1, endPage - totalPagesToShow + 1);
+    }
+    if (endPage - startPage + 1 < totalPagesToShow && endPage < totalPages)
+    {
+        endPage = Math.Min(totalPages, startPage + totalPagesToShow - 1);
+    }
+}
+
+<nav aria-label="Page navigation bg-secondary">
+    <ul class="pagination justify-content-end ">
+        <li class="page-item ">
+            @if (currentPage != 1)
+            {
+                <a class="page-link bg-white text-dark" href="/Anime/Episode?id=@animeId&page=@(currentPage - 1)">Previous</a>
+            }
+            else
+            {
+                <a class="page-link bg-white text-dark" href="#">Previous</a>
+            }
+        </li>
+
+        @if (startPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link bg-white text-dark" href="/Anime/Episode?id=@animeId&page=1">1</a>
+            </li>
+            @if (startPage > 2)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+        }
+
+        @for (int i = startPage; i <= endPage; i++)
+        {
+            if (i == currentPage)
+            {
+                <li class="page-item active">
+                    <a class="page-link bg-primary text-white" href="/Anime/Episode?id=@animeId&page=@i">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link text-dark" href="/Anime/Episode?id=@animeId&page=@i">@i</a>
+                </li>
+            }
+        }
+
+        @if (endPage < totalPages)
+        {
+            @if (endPage < totalPages - 1)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            }
+            <li class="page-item">
+                <a class="page-link bg-white text-dark" href="/Anime/Episode?id=@animeId&page=@totalPages">@totalPages</a>
+            </li>
+        }
+
+        <li class="page-item">
+            @if (currentPage != totalPages)
+            {
+                <a class="page-link bg-white text-dark" href="/Anime/Episode?id=@animeId&page=@(currentPage + 1)">Next</a>
+            }
+            else
+            {
+                <a class="page-link bg-white text-dark" href="#">Next</a>
+            }
+        </li>
+    </ul>
+</nav>

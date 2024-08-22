@@ -5,7 +5,7 @@
     ViewData["Title"] = "Search Anime";
 }
 
-<section class="dark">
+<section class="dark" id="anime-card">
     <div class="container py-4">
         @for (int i = 0; i < Model.Count; i++)
         {
@@ -17,7 +17,7 @@
                         <img class="postcard__img" src="@Url.Content(anime.Images.WebP.LargeImageUrl)" alt="Image Title" />
                     </a>
                     <div class="postcard__text">
-                        <h1 class="postcard__title blue" style="margin-left:5px"><a href="#">@anime.Title</a></h1>
+                        <h1 class="postcard__title blue" style="margin-left:5px"><a href="/Anime/Detail?id=@anime.MalId">@anime.Title</a></h1>
                         <div class="postcard__subtitle small" style="margin-left:5px">
                             <time datetime="2020-05-25 12:00:00">
                                 <i class="fas fa-calendar-alt mr-2"></i>@anime.Year
@@ -46,7 +46,7 @@
                         <img class="postcard__img" src="@Url.Content(anime.Images.WebP.LargeImageUrl)" alt="Image Title" />
                     </a>
                     <div class="postcard__text">
-                        <h1 class="postcard__title red"><a href="#">@anime.Title</a></h1>
+                        <h1 class="postcard__title red"><a href="/Anime/Detail?id=@anime.MalId">@anime.Title</a></h1>
                         <div class="postcard__subtitle small">
                             <time datetime="2020-05-25 12:00:00">
                                 <i class="fas fa-calendar-alt mr-2"></i>@anime.Year
